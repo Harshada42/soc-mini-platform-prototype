@@ -1,0 +1,58 @@
+[
+    {
+      "rule_id": "RULE-01",
+      "name": "SSH Brute Force (>=5 fails in 2 min)",
+      "type": "threshold_count",
+      "enabled": true,
+      "severity": "High",
+      "mitre": ["T1110"],
+      "match": { "source": "linux_auth", "event_type": "login_fail", "contains": [] },
+      "group_by": "src_ip",
+      "threshold": 5,
+      "window_minutes": 2
+    },
+    {
+      "rule_id": "RULE-02",
+      "name": "Suspicious PowerShell Encoded Command",
+      "type": "simple_contains",
+      "enabled": true,
+      "severity": "Critical",
+      "mitre": ["T1059.001"],
+      "match": {
+        "source": "windows_security",
+        "event_type": "process_create",
+        "contains": ["powershell.exe", "-enc"]
+      }
+    },
+    {
+      "rule_id": "RULE-03",
+      "name": "Web Admin Scan (>=4 hits in 3 min)",
+      "type": "threshold_count",
+      "enabled": true,
+      "severity": "High",
+      "mitre": ["T1190"],
+      "match": {
+        "source": "nginx",
+        "event_type": "http_request",
+        "contains": ["/admin", "/wp-login.php"]
+      },
+      "group_by": "src_ip",
+      "threshold": 4,
+      "window_minutes": 3
+    },
+    {
+      "rule_id": "RULE-04",
+      "name": "DNS Tunneling Suspicion (very long query)",
+      "type": "field_length",
+      "enabled": true,
+      "severity": "Medium",
+      "mitre": ["T1071.004"],
+      "match": {
+        "source": "dns",
+        "event_type": "dns_query",
+        "field": "message",
+        "min_length": 80
+      }
+    }
+  ]
+  

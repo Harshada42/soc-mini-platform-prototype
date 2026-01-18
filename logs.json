@@ -1,0 +1,147 @@
+[
+    {
+      "id": "LOG-1001",
+      "timestamp": "2026-01-18T09:12:14Z",
+      "source": "linux_auth",
+      "event_type": "login_fail",
+      "user": "root",
+      "host": "srv-auth-01",
+      "src_ip": "185.92.10.23",
+      "dst_ip": "10.0.1.10",
+      "severity": "Medium",
+      "message": "Failed password for root from 185.92.10.23 port 51222 ssh2"
+    },
+    {
+      "id": "LOG-1002",
+      "timestamp": "2026-01-18T09:12:32Z",
+      "source": "linux_auth",
+      "event_type": "login_fail",
+      "user": "root",
+      "host": "srv-auth-01",
+      "src_ip": "185.92.10.23",
+      "dst_ip": "10.0.1.10",
+      "severity": "Medium",
+      "message": "Failed password for root from 185.92.10.23 port 51233 ssh2"
+    },
+    {
+      "id": "LOG-1003",
+      "timestamp": "2026-01-18T09:12:52Z",
+      "source": "linux_auth",
+      "event_type": "login_fail",
+      "user": "root",
+      "host": "srv-auth-01",
+      "src_ip": "185.92.10.23",
+      "dst_ip": "10.0.1.10",
+      "severity": "Medium",
+      "message": "Failed password for root from 185.92.10.23 port 51240 ssh2"
+    },
+    {
+      "id": "LOG-1004",
+      "timestamp": "2026-01-18T09:13:07Z",
+      "source": "linux_auth",
+      "event_type": "login_fail",
+      "user": "root",
+      "host": "srv-auth-01",
+      "src_ip": "185.92.10.23",
+      "dst_ip": "10.0.1.10",
+      "severity": "High",
+      "message": "Failed password for root from 185.92.10.23 port 51251 ssh2 (threshold rising)"
+    },
+    {
+      "id": "LOG-1005",
+      "timestamp": "2026-01-18T09:13:19Z",
+      "source": "windows_security",
+      "event_type": "process_create",
+      "user": "Saraswati",
+      "host": "WIN-DEV-07",
+      "src_ip": "10.0.2.15",
+      "dst_ip": "10.0.2.15",
+      "severity": "Critical",
+      "message": "Process created: powershell.exe -enc SQBFAFgA... (suspicious encoded command)"
+    },
+    {
+      "id": "LOG-1006",
+      "timestamp": "2026-01-18T09:13:41Z",
+      "source": "nginx",
+      "event_type": "http_request",
+      "user": "-",
+      "host": "web-01",
+      "src_ip": "45.83.22.19",
+      "dst_ip": "10.0.3.20",
+      "severity": "Low",
+      "message": "GET /wp-login.php 404"
+    },
+    {
+      "id": "LOG-1007",
+      "timestamp": "2026-01-18T09:13:44Z",
+      "source": "nginx",
+      "event_type": "http_request",
+      "user": "-",
+      "host": "web-01",
+      "src_ip": "45.83.22.19",
+      "dst_ip": "10.0.3.20",
+      "severity": "Low",
+      "message": "GET /admin 403"
+    },
+    {
+      "id": "LOG-1008",
+      "timestamp": "2026-01-18T09:13:55Z",
+      "source": "dns",
+      "event_type": "dns_query",
+      "user": "-",
+      "host": "dns-01",
+      "src_ip": "10.0.4.12",
+      "dst_ip": "8.8.8.8",
+      "severity": "Medium",
+      "message": "Query: a0x9k2m3n4b5c6d7e8f9g0h1i2j3.example.com (very long subdomain)"
+    },
+    {
+      "id": "LOG-1009",
+      "timestamp": "2026-01-18T09:14:12Z",
+      "source": "windows_security",
+      "event_type": "login_success",
+      "user": "devuser",
+      "host": "WIN-OPS-02",
+      "src_ip": "103.21.56.10",
+      "dst_ip": "10.0.2.40",
+      "severity": "Low",
+      "message": "Successful login for devuser (4624)"
+    },
+    {
+      "id": "LOG-1010",
+      "timestamp": "2026-01-18T09:14:20Z",
+      "source": "windows_security",
+      "event_type": "login_success",
+      "user": "devuser",
+      "host": "WIN-OPS-02",
+      "src_ip": "34.210.11.9",
+      "dst_ip": "10.0.2.40",
+      "severity": "High",
+      "message": "Successful login for devuser from unusual IP (impossible travel scenario)"
+    },
+    {
+      "id": "LOG-1011",
+      "timestamp": "2026-01-18T09:14:42Z",
+      "source": "firewall",
+      "event_type": "port_scan",
+      "user": "-",
+      "host": "fw-edge-01",
+      "src_ip": "91.199.88.2",
+      "dst_ip": "10.0.3.20",
+      "severity": "High",
+      "message": "Multiple connection attempts to ports 22, 80, 443, 3389 detected"
+    },
+    {
+      "id": "LOG-1012",
+      "timestamp": "2026-01-18T09:15:03Z",
+      "source": "linux_auth",
+      "event_type": "login_success",
+      "user": "ubuntu",
+      "host": "srv-app-02",
+      "src_ip": "10.0.2.22",
+      "dst_ip": "10.0.1.22",
+      "severity": "Low",
+      "message": "Accepted publickey for ubuntu from 10.0.2.22 port 55112 ssh2"
+    }
+  ]
+  

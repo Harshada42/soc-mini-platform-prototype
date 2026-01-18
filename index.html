@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SOC Mini Platform</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-badge">SOC</div>
+        <div class="brand-text">
+          <div class="brand-title">Mini Platform</div>
+          <div class="brand-subtitle">Front-end SIEM UI</div>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-item active" data-view="logs">
+          <span class="nav-dot"></span> Logs
+        </button>
+        <button class="nav-item" data-view="alerts">
+          <span class="nav-dot"></span> Alerts
+        </button>
+        <button class="nav-item" data-view="rules">
+          <span class="nav-dot"></span> Rules
+        </button>
+        <button class="nav-item" data-view="cases" disabled title="Coming soon">
+          <span class="nav-dot"></span> Cases
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="mini">
+          <div class="mini-label">Status</div>
+          <div id="statusText" class="mini-value">Loading…</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <header class="topbar">
+        <div class="title-wrap">
+          <h1 id="pageTitle">Logs</h1>
+          <p id="pageSubtitle" class="subtitle">Search, filter, and inspect events</p>
+        </div>
+
+        <div class="actions">
+          <button id="exportBtn" class="btn btn-ghost" title="Export current view as CSV">
+            Export CSV
+          </button>
+          <button id="reloadBtn" class="btn" title="Reload logs.json and rules.json">
+            Reload
+          </button>
+        </div>
+      </header>
+
+      <!-- LOGS VIEW -->
+      <section id="view-logs" class="view">
+        <section class="controls">
+          <div class="control">
+            <label for="searchInput">Search</label>
+            <input id="searchInput" type="text" placeholder="Search by IP, user, host, message, event type…" />
+          </div>
+
+          <div class="control">
+            <label for="severitySelect">Severity</label>
+            <select id="severitySelect">
+              <option value="ALL">All</option>
+              <option value="Critical">Critical</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+
+          <div class="control">
+            <label for="sourceSelect">Source</label>
+            <select id="sourceSelect">
+              <option value="ALL">All</option>
+            </select>
+          </div>
+
+          <div class="control">
+            <label for="pageSizeSelect">Rows</label>
+            <select id="pageSizeSelect">
+              <option value="10">10</option>
+              <option value="12" selected>12</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div class="panel-title">
+              <span class="dot"></span>
+              <span>Event Logs</span>
+            </div>
+            <div class="panel-meta" id="resultMeta">—</div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Time (UTC)</th>
+                  <th>Source</th>
+                  <th>Type</th>
+                  <th>User</th>
+                  <th>Host</th>
+                  <th>Src IP</th>
+                  <th>Dst IP</th>
+                  <th>Severity</th>
+                  <th>Message</th>
+                </tr>
+              </thead>
+              <tbody id="logsTbody"></tbody>
+            </table>
+          </div>
+
+          <div class="panel-foot">
+            <div class="pager">
+              <button id="prevBtn" class="btn btn-ghost">Prev</button>
+              <span id="pageInfo" class="page-info">Page 1 / 1</span>
+              <button id="nextBtn" class="btn btn-ghost">Next</button>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- ALERTS VIEW -->
+      <section id="view-alerts" class="view hidden">
+        <section class="controls controls-3">
+          <div class="control">
+            <label for="alertSearchInput">Search Alerts</label>
+            <input id="alertSearchInput" type="text" placeholder="Search title, IP, user, rule…" />
+          </div>
+
+          <div class="control">
+            <label for="alertSeveritySelect">Severity</label>
+            <select id="alertSeveritySelect">
+              <option value="ALL">All</option>
+              <option value="Critical">Critical</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+
+          <div class="control">
+            <label for="alertStatusSelect">Status</label>
+            <select id="alertStatusSelect">
+              <option value="ALL">All</option>
+              <option value="new">new</option>
+              <option value="investigating">investigating</option>
+              <option value="closed">closed</option>
+            </select>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div class="panel-title">
+              <span class="dot"></span>
+              <span>Alerts Timeline</span>
+            </div>
+            <div class="panel-meta" id="alertsMeta">—</div>
+          </div>
+
+          <div class="cards" id="alertsList"></div>
+
+          <div class="panel-foot">
+            <button id="regenerateAlertsBtn" class="btn">Regenerate Alerts</button>
+          </div>
+        </section>
+      </section>
+
+      <!-- RULES VIEW -->
+      <section id="view-rules" class="view hidden">
+        <section class="panel">
+          <div class="panel-head">
+            <div class="panel-title">
+              <span class="dot"></span>
+              <span>Detection Rules</span>
+            </div>
+            <div class="panel-meta" id="rulesMeta">—</div>
+          </div>
+
+          <div class="cards" id="rulesList"></div>
+
+          <div class="panel-foot">
+            <button id="addRuleBtn" class="btn btn-ghost">Add Rule (UI)</button>
+            <button id="copyRulesJsonBtn" class="btn">Copy Rules JSON</button>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <!-- Details Modal (for Logs + Alerts) -->
+  <div id="modalOverlay" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <div id="modalTitle" class="modal-title">Details</div>
+          <div id="modalSubtitle" class="modal-subtitle">—</div>
+        </div>
+        <button id="closeModalBtn" class="btn btn-ghost">Close</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="kv" id="modalKv"></div>
+        <div class="json-block">
+          <div class="json-head">
+            <span>Raw JSON</span>
+            <button id="copyJsonBtn" class="btn btn-ghost">Copy</button>
+          </div>
+          <pre id="modalJson" class="json-pre">{}</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Rule Modal -->
+  <div id="ruleOverlay" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <div class="modal-title">Add Detection Rule</div>
+          <div class="modal-subtitle">This adds in-memory rule (not saved to file)</div>
+        </div>
+        <button id="closeRuleBtn" class="btn btn-ghost">Close</button>
+      </div>
+
+      <div class="modal-body" style="grid-template-columns: 1fr;">
+        <div class="form-grid">
+          <div class="control">
+            <label>Rule Name</label>
+            <input id="rName" type="text" placeholder="e.g., Suspicious PowerShell Encoded Command" />
+          </div>
+
+          <div class="form-row">
+            <div class="control">
+              <label>Type</label>
+              <select id="rType">
+                <option value="simple_contains">simple_contains</option>
+                <option value="threshold_count">threshold_count</option>
+                <option value="field_length">field_length</option>
+              </select>
+            </div>
+            <div class="control">
+              <label>Severity</label>
+              <select id="rSeverity">
+                <option>Low</option>
+                <option>Medium</option>
+                <option>High</option>
+                <option>Critical</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="control">
+              <label>Source</label>
+              <input id="rSource" type="text" placeholder="e.g., windows_security / linux_auth / nginx" />
+            </div>
+            <div class="control">
+              <label>Event Type</label>
+              <input id="rEventType" type="text" placeholder="e.g., process_create / login_fail / http_request" />
+            </div>
+          </div>
+
+          <div class="control">
+            <label>MITRE Tags (comma separated)</label>
+            <input id="rMitre" type="text" placeholder="e.g., T1110, T1059.001" />
+          </div>
+
+          <div class="control">
+            <label>Contains (comma separated) — used for simple_contains and threshold_count</label>
+            <input id="rContains" type="text" placeholder="e.g., powershell.exe, -enc, /admin" />
+          </div>
+
+          <div class="form-row">
+            <div class="control">
+              <label>Threshold (threshold_count)</label>
+              <input id="rThreshold" type="number" min="2" value="5" />
+            </div>
+            <div class="control">
+              <label>Window Minutes (threshold_count)</label>
+              <input id="rWindow" type="number" min="1" value="2" />
+            </div>
+            <div class="control">
+              <label>Group By (threshold_count)</label>
+              <select id="rGroupBy">
+                <option value="src_ip">src_ip</option>
+                <option value="user">user</option>
+                <option value="host">host</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="control">
+              <label>Field (field_length)</label>
+              <select id="rField">
+                <option value="message">message</option>
+                <option value="event_type">event_type</option>
+              </select>
+            </div>
+            <div class="control">
+              <label>Min Length (field_length)</label>
+              <input id="rMinLen" type="number" min="10" value="80" />
+            </div>
+          </div>
+
+          <div class="actions">
+            <button id="saveRuleBtn" class="btn">Save Rule</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
